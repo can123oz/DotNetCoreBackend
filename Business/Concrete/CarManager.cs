@@ -22,7 +22,7 @@ namespace Business.Concrete
 
         public IResult AddCar(Car car)
         {
-            if (car != null)
+            if (car.Description != null)
             {
                 _carDal.Add(car);
                 return new SuccessResult(Message.SuccessMessage);

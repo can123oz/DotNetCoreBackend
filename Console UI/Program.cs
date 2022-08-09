@@ -50,46 +50,78 @@ namespace Console_UI
 
             CarManager carManager = new CarManager(new EfCarDal());
 
-            //Car car = new Car()
-            //{
-            //    Name = "Son Eklenen",
-            //    BrandId = 1,
-            //    ModelYear = 1992,
-            //    DailyPrice = 120000,
-            //    Description = "son denemedim",
-            //};
-            //carManager.AddCar(car);
-
-            foreach (var item in carManager.GetAll())
+            Car car = new Car()
             {
-                Console.WriteLine(item.Name);
-
-            }
-            Console.WriteLine("-----------------------------------");
-
-            foreach (var item in carManager.GetCarDetails())
-            {
-                Console.Write(item.BrandName + " :  " + item.CarName);
-            }
-
-            Car car2 = new Car()
-            {
-                Name = "Son Eklenen",
+                Name = "Son agustos",
                 BrandId = 1,
                 ModelYear = 1992,
                 DailyPrice = 120000,
-                Description = "son denemedim"
+                Description = "son denemedim",
             };
-            Console.WriteLine("-----------------------------------");
-            foreach (var item in carManager.GetAll())
+            //carManager.AddCar(car);
+
+            //Car car2 = new Car()
+            //{
+            //    //Name = "Son 2. araba denenen",
+            //    //BrandId = 1,
+            //    //ModelYear = 2022,
+            //    //DailyPrice = 120000,
+            //    //Description = "son denemedim",
+            //};
+            //var result = carManager.AddCar(car2);
+            //Console.WriteLine(result.Message);
+            //DatabaseContext context = new DatabaseContext();
+            //context.Car.Add(car2);
+            //context.SaveChanges();
+
+            //foreach (var item in carManager.GetAll().Data)
+            //{
+            //    Console.WriteLine(item.Name);
+
+            //}
+            //Console.WriteLine("-----------------------------------");
+
+            //foreach (var item in carManager.GetCarDetails().Data)
+            //{
+            //    Console.Write(item.BrandName + " :  " + item.CarName);
+            //}
+
+            //Console.WriteLine("-----------------------------------");
+            //foreach (var item in carManager.GetAll().Data)
+            //{
+            //    Console.WriteLine(item.Name);
+            //}
+            //Console.WriteLine("-----------------------------------");
+            //foreach (var item in carManager.GetByColorId(2).Data)
+            //{
+            //    Console.WriteLine(item.Description);
+            //}
+
+            DatabaseContext context = new DatabaseContext();
+
+            foreach (var item in context.User)
             {
-                Console.WriteLine(item.Name);
+                Console.WriteLine(item.FirstName);
             }
             Console.WriteLine("-----------------------------------");
-            foreach (var item in carManager.GetByColorId(2))
+
+            User user = new User()
             {
-                Console.WriteLine(item.Description);
+                FirstName = "denemeDal",
+                LastName = "ozdmr",
+                Email = "can@gas.com",
+                Password = "q132asd",
+            };
+
+            UserManager users = new UserManager(new EfUserDal());
+            
+            //users.AddUser(user);
+
+            foreach (var item in users.GetAll().Data)
+            {
+                Console.WriteLine(item.FirstName);
             }
+
             Console.ReadLine();
         }
     }
