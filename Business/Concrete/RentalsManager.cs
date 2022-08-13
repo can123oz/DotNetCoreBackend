@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
+using DataAccess.Abstract;
 using Entity.Concrete;
 using System;
 using System.Collections.Generic;
@@ -11,14 +13,23 @@ namespace Business.Concrete
 {
     public class RentalsManager : IRentalsService
     {
+        IRentalsDal _rentalDal;
+
+        public RentalsManager(IRentalsDal rentalsDal)
+        {
+            _rentalDal = rentalsDal;
+        }
+
         public IResult AddRental(Rentals rentals)
         {
-            throw new NotImplementedException();
+            _rentalDal.Add(rentals);
+            return new Result(Message.SuccessMessage, true);
         }
 
         public IResult DeleteRental(int id)
         {
-            throw new NotImplementedException();
+            _rentalDal.Delete(p => p.Id == id);
+            return new Result(true);
         }
 
         public IDataResult<List<Rentals>> GetAll()
