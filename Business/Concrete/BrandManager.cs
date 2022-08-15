@@ -49,14 +49,14 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Brand>>(Message.DataErrorMessage);
         }
 
-        public IDataResult<List<Brand>> GetById(int id)
+        public IDataResult<Brand> GetById(int id)
         {
-            var result = _context.GetAll(p=>p.Id == id);
+            var result = _context.Get(p=>p.Id == id);
             if (result != null)
             {
-                return new SuccessDataResult<List<Brand>>(result, Message.DataSuccessMessage);
+                return new SuccessDataResult<Brand>(result, Message.DataSuccessMessage);
             }
-            return new ErrorDataResult<List<Brand>>(Message.DataErrorMessage);
+            return new ErrorDataResult<Brand>(Message.DataErrorMessage);
         }
     }
 }

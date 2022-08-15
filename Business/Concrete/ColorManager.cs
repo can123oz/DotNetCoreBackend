@@ -46,10 +46,14 @@ namespace Business.Concrete
             return new DataResult<List<Color>>(result, true);
         }
 
-        public IDataResult<List<Color>> GetById(int id)
+        public IDataResult<Color> GetById(int id)
         {
-            var result = _context.GetAll(p=>p.Id == id);
-            return new DataResult<List<Color>>(result,true);
+            var result = _context.Get(p=>p.Id == id);
+            if (result.Name.Length > 0)
+            {
+                return new DataResult<Color>(result, true);
+            }
+            return new ErrorDataResult<Color>(Message.DataErrorMessage);
         }
     }
 }
