@@ -34,17 +34,28 @@ namespace Business.Concrete
 
         public IDataResult<List<Rentals>> GetAll()
         {
-            throw new NotImplementedException();
+            var result = _rentalDal.GetAll();
+            if (result.Count > 0)
+            {
+                return new SuccessDataResult<List<Rentals>>(result, Message.DataSuccessMessage);
+            }
+            return new ErrorDataResult<List<Rentals>>(result, Message.DataSuccessMessage);
         }
 
         public IResult GetById(int id)
         {
-            throw new NotImplementedException();
+            var result = _rentalDal.Get(p=>p.Id == id);
+            if (result.Id > 0)
+            {
+                return new SuccessDataResult<Rentals>(result, Message.DataSuccessMessage);
+            }
+            return new ErrorDataResult<Rentals>(result, Message.DataSuccessMessage);
         }
 
         public IResult UpdateRental(Rentals rentals)
         {
-            throw new NotImplementedException();
+            _rentalDal.Update(rentals);
+            return new Result(Message.SuccessMessage, true);
         }
     }
 }

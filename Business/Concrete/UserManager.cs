@@ -39,7 +39,11 @@ namespace Business.Concrete
         public IDataResult<List<User>> GetAll()
         {
             var result = _userDal.GetAll();
-            return new DataResult<List<User>>(result, true);
+            if (result.Count > 0)
+            {
+                return new DataResult<List<User>>(result, true);
+            }
+            return new ErrorDataResult<List<User>>(result);
         }
 
         public IDataResult<User> GetById(int id)
@@ -54,9 +58,10 @@ namespace Business.Concrete
             if (updatedUser.FirstName != null)
             {
                 _userDal.Update(updatedUser);
-                return new SuccessResult();
+                return new SuccessResult(Message.SuccessMessage);
             }
             return new ErrorResult(Message.ErrorMessage);
         }
+
     }
 }
