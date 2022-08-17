@@ -32,23 +32,24 @@ namespace WebAPI
         {
             services.AddControllers();
 
-            services.AddSingleton<ICarService, CarManager>();
-            services.AddSingleton<ICarDal, EfCarDal>();
 
-            services.AddSingleton<IBrandService, BrandManager>();
-            services.AddSingleton<IBrandDal, EfBrandDal>();
+            //services.AddSingleton<ICarService, CarManager>();
+            //services.AddSingleton<ICarDal, EfCarDal>();
 
-            services.AddSingleton<IColorService, ColorManager>();
-            services.AddSingleton<IColorDal, EfColorDal>();
+            //services.AddSingleton<IBrandService, BrandManager>();
+            //services.AddSingleton<IBrandDal, EfBrandDal>();
 
-            services.AddSingleton<ICustomersService, CustomersManager>();
-            services.AddSingleton<ICustomersDal, EfCustomersDal>();
+            //services.AddSingleton<IColorService, ColorManager>();
+            //services.AddSingleton<IColorDal, EfColorDal>();
 
-            services.AddSingleton<IRentalsService, RentalsManager>();
-            services.AddSingleton<IRentalsDal, EfRentalsDal>();
+            //services.AddSingleton<ICustomersService, CustomersManager>();
+            //services.AddSingleton<ICustomersDal, EfCustomersDal>();
 
-            services.AddSingleton<IUserService, UserManager>();
-            services.AddSingleton<IUserDal, EfUserDal>();
+            //services.AddSingleton<IRentalsService, RentalsManager>();
+            //services.AddSingleton<IRentalsDal, EfRentalsDal>();
+
+            //services.AddSingleton<IUserService, UserManager>();
+            //services.AddSingleton<IUserDal, EfUserDal>();
 
             services.AddSwaggerGen(c =>
             {
