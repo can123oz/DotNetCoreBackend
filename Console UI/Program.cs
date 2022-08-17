@@ -5,6 +5,7 @@ using DataAccess.Concrete.InMemory;
 using Entity.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Console_UI
 {
@@ -58,6 +59,25 @@ namespace Console_UI
                 DailyPrice = 120000,
                 Description = "son denemedim",
             };
+
+
+
+
+          //  string myJson = "{departman:" + contactForm.Departman + ", ad: " + contactForm.Name + ", soyad: "
+          //+ contactForm.Surname + ", cinsiyet: " + "Belirtilmemiş" + ", eposta: "
+          //+ contactForm.Email + ", telefon: " + phone + ", il: "
+          //+ il + ", ilce:" + ilce + ", mesaj: "
+          //+ ilce + "urun_adi: " + contactForm.ProductName
+          //+ ", siparis_no: " + contactForm.OrderNo
+          //+ ", kvkk_onay: " + "X"
+          //+ ", kvkk_onay_tarih: " + kvkk_tarih
+          //+ ", arama_onay: " + "X"
+          //+ ", arama_onay_tarih: " + kvkk_tarih
+          //+ ", sms_onay: " + "X"
+          //+ ", sms_onay_tarih: " + kvkk_tarih
+          //+ ", email_onay: " + "X"
+          //+ ", email_onay_tarih: " + kvkk_tarih
+          //+ "}";
             //carManager.AddCar(car);
 
             //Car car2 = new Car()
@@ -97,32 +117,40 @@ namespace Console_UI
             //    Console.WriteLine(item.Description);
             //}
 
-            DatabaseContext context = new DatabaseContext();
+            //DatabaseContext context = new DatabaseContext();
 
-            foreach (var item in context.User)
-            {
-                Console.WriteLine(item.FirstName);
-            }
+            //foreach (var item in context.User)
+            //{
+            //    Console.WriteLine(item.FirstName);
+            //}
+            //Console.WriteLine("-----------------------------------");
+
+            //User user = new User()
+            //{
+            //    FirstName = "denemeDal",
+            //    LastName = "ozdmr",
+            //    Email = "can@gas.com",
+            //    Password = "q132asd",
+            //};
+
+            //UserManager users = new UserManager(new EfUserDal());
+
+            ////users.AddUser(user);
+
+            //foreach (var item in users.GetAll().Data)
+            //{
+            //    Console.WriteLine(item.FirstName);
+            //}
+
+
+
             Console.WriteLine("-----------------------------------");
 
-            User user = new User()
-            {
-                FirstName = "denemeDal",
-                LastName = "ozdmr",
-                Email = "can@gas.com",
-                Password = "q132asd",
-            };
-
-            UserManager users = new UserManager(new EfUserDal());
-            
-            //users.AddUser(user);
-
-            foreach (var item in users.GetAll().Data)
-            {
-                Console.WriteLine(item.FirstName);
-            }
 
             Console.ReadLine();
         }
     }
+
+
+
 }
