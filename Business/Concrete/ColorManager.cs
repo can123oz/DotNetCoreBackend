@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -22,12 +24,12 @@ namespace Business.Concrete
 
         public IResult AddColor(Color color)
         {
-            if (color.Name != null)
-            {
-                _context.Add(color);
-                return new SuccessResult(Message.SuccessMessage);
-            }
-            return new ErrorResult(Message.ErrorMessage);
+            ValidationTool.Validate(new ColorValidator(), color);
+
+            _context.Add(color);
+            return new SuccessResult(Message.SuccessMessage);
+
+            //return new ErrorResult(Message.ErrorMessage);
         }
 
         public IResult DeleteColor(int id)
@@ -48,7 +50,7 @@ namespace Business.Concrete
 
         public IDataResult<Color> GetById(int id)
         {
-            var result = _context.Get(p=>p.Id == id);
+            var result = _context.Get(p => p.Id == id);
             if (result.Name.Length > 0)
             {
                 return new DataResult<Color>(result, true);

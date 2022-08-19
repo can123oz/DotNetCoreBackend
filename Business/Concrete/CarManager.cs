@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -22,17 +24,15 @@ namespace Business.Concrete
 
         public IResult AddCar(Car car)
         {
-            if (car.Description != null)
-            {
-                _carDal.Add(car);
-                return new SuccessResult(Message.SuccessMessage);
-            }
-            return new ErrorResult(Message.ErrorMessage);
+            ValidationTool.Validate(new CarValidator(), car);
+            _carDal.Add(car);
+            return new SuccessResult(Message.SuccessMessage);
+            //return new ErrorResult(Message.ErrorMessage);
         }
 
         public IResult DeleteCar(int id)
         {
-            _carDal.Delete(p=>p.Id == id);
+            _carDal.Delete(p => p.Id == id);
             return new Result(true);
         }
 
@@ -69,7 +69,7 @@ namespace Business.Concrete
             {
                 return new SuccessDataResult<Car>(result, Message.SuccessMessage);
             }
-            return new ErrorDataResult<Car>(result,Message.DataErrorMessage);
+            return new ErrorDataResult<Car>(result, Message.DataErrorMessage);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
@@ -77,7 +77,7 @@ namespace Business.Concrete
             var result = _carDal.GetCarDetails();
             if (result != null)
             {
-                return new SuccessDataResult<List<CarDetailDto>>(result,Message.DataSuccessMessage);
+                return new SuccessDataResult<List<CarDetailDto>>(result, Message.DataSuccessMessage);
             }
             return new ErrorDataResult<List<CarDetailDto>>(result, Message.DataErrorMessage);
         }
