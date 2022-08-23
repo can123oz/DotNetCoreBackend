@@ -15,18 +15,18 @@ namespace Business.Concrete
 {
     public class ColorManager : IColorService
     {
-        IColorDal _context;
+        IColorDal _colorDal;
 
-        public ColorManager(IColorDal context)
+        public ColorManager(IColorDal colorDal)
         {
-            _context = context;
+            _colorDal = colorDal;
         }
 
         public IResult AddColor(Color color)
         {
             ValidationTool.Validate(new ColorValidator(), color);
 
-            _context.Add(color);
+            _colorDal.Add(color);
             return new SuccessResult(Message.SuccessMessage);
 
             //return new ErrorResult(Message.ErrorMessage);
@@ -36,7 +36,7 @@ namespace Business.Concrete
         {
             if (id > 0)
             {
-                _context.Delete(p => p.Id == id);
+                _colorDal.Delete(p => p.Id == id);
                 return new SuccessResult(Message.SuccessMessage);
             }
             return new ErrorResult(Message.ErrorMessage);
@@ -44,13 +44,13 @@ namespace Business.Concrete
 
         public IDataResult<List<Color>> GetAll()
         {
-            var result = _context.GetAll();
+            var result = _colorDal.GetAll();
             return new DataResult<List<Color>>(result, true);
         }
 
         public IDataResult<Color> GetById(int id)
         {
-            var result = _context.Get(p => p.Id == id);
+            var result = _colorDal.Get(p => p.Id == id);
             if (result.Name.Length > 0)
             {
                 return new DataResult<Color>(result, true);

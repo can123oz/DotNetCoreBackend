@@ -109,5 +109,21 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        public IResult UpdateCar(Car car)
+        {
+            var updatedCar = _carDal.Get(p => p.Id == car.Id);
+            if (updatedCar != null)
+            {
+                updatedCar.BrandId = car.BrandId;
+                updatedCar.ColorId = car.ColorId;
+                updatedCar.ColorId = car.ColorId;
+                updatedCar.DailyPrice = car.DailyPrice;
+                updatedCar.Description = car.Description;
+                updatedCar.ModelYear = car.ModelYear;
+                updatedCar.Name = car.Name;
+                return new SuccessResult(Message.SuccessMessage);
+            }
+            return new ErrorResult(Message.GeneralErrorMessage);
+        }
     }
 }
