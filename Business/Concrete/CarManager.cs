@@ -3,6 +3,7 @@ using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Validation;
 using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -26,12 +27,14 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarValidator))]
         public IResult AddCar(Car car)
         {
-
             //ValidationTool.Validate(new CarValidator(), car); //no need to validate like this.
-            
-            _carDal.Add(car);
-            return new SuccessResult(Message.SuccessMessage);
-            //return new ErrorResult(Message.ErrorMessage);
+            var result = BusinessRules.Run(CheckIfNameTaken(car.Name), CheckIfCarCountOfBrandCorrect(car.BrandId,10));
+            if (result.Success)
+            {
+                _carDal.Add(car);
+                return new SuccessResult(Message.SuccessMessage);
+            }
+            return new ErrorResult();
         }
 
         public IResult DeleteCar(int id)
@@ -85,5 +88,26 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<List<CarDetailDto>>(result, Message.DataErrorMessage);
         }
+
+        private IResult CheckIfNameTaken(string name)
+        {
+            var result = _carDal.GetAll(p => p.Name == name).Any();
+            if (result)
+            {
+                return new ErrorResult(Message.NameTakenError);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfCarCountOfBrandCorrect(int brandId, int maxNumber)
+        {
+            var result = _carDal.GetAll(p => p.BrandId == brandId).Any();
+            if (result)
+            {
+                return new ErrorResult(Message.GeneralErrorMessage);
+            }
+            return new SuccessResult();
+        }
+
     }
 }

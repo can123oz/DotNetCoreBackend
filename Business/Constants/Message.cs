@@ -12,5 +12,7 @@ namespace Business.Constants
         public static string DataSuccessMessage = "Succesfuly Data Returned.";
         public static string ErrorMessage = "Error Returned.";
         public static string DataErrorMessage = "Data Error Returned.";
+        public static string NameTakenError = "Name is Taken pick another name.";
+        public static string GeneralErrorMessage = "An Error Occured in Business Rules";
     }
 }
