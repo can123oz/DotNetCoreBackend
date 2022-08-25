@@ -14,10 +14,12 @@ namespace Business.Concrete
     public class CarImageManager : ICarImageService
     {
         ICarImageDal _carImageDal;
+
         public CarImageManager(ICarImageDal carImageDal)
         {
             _carImageDal = carImageDal;
         }
+
         public IResult Add(CarImage carImage)
         {
             throw new NotImplementedException();
@@ -25,7 +27,8 @@ namespace Business.Concrete
 
         public IResult Delete(int Id)
         {
-            throw new NotImplementedException();
+            _carImageDal.Delete(p => p.Id == Id);
+            return new Result(true);
         }
 
         public IDataResult<List<CarImage>> GetAll()
@@ -36,12 +39,22 @@ namespace Business.Concrete
 
         public IResult GetByCarId(int Id)
         {
-            throw new NotImplementedException();
+            var result = _carImageDal.Get(p => p.CarId == Id);
+            if (result != null)
+            {
+                return new SuccessDataResult<CarImage>(result);
+            }
+            return new ErrorDataResult<CarImage>();
         }
 
         public IResult GetById(int Id)
         {
-            throw new NotImplementedException();
+            var result = _carImageDal.Get(p => p.Id == Id);
+            if (result != null)
+            {
+                return new SuccessDataResult<CarImage>(result);
+            }
+            return new ErrorDataResult<CarImage>();
         }
 
         public IResult Update(CarImage carImage)

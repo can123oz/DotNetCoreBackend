@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Entity.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -30,7 +31,40 @@ namespace WebAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var result = _carImageService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+        }
 
+        [HttpPost]
+        public IActionResult Post(CarImage carImage)
+        {
+            return Ok();
+        }
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            var result = _carImageService.Delete(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+        }
+
+
+        [HttpPut]
+        public IActionResult Update()
+        {
+            return Ok();
+        }
 
 
     }
