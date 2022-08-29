@@ -12,7 +12,7 @@ namespace Core.Utilities.Helpers
     public class FileHelper
     {
         private static string _currentFileDirectory = Environment.CurrentDirectory + "\\wwwroot";
-        private static string _folderName = "\\uploads\\images";
+        private static string _folderName = "\\uploads\\Images";
 
 
         public static IResult Add(IFormFile file)
