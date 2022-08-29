@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             var result = _carImageService.GetAll();
             if (result.Data.Count > 0)
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult GetById(int id)
         {
             var result = _carImageService.GetById(id);
             if (result.Success)
@@ -42,10 +42,26 @@ namespace WebAPI.Controllers
             return NotFound();
         }
 
-        [HttpPost]
-        public IActionResult Post(CarImage carImage)
+        [HttpGet("GetByCarId/{id}")]
+        public IActionResult GetByCarId(int id)
         {
-            return Ok();
+            var result = _carImageService.GetByCarId(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("AddCarImage")]
+        public IActionResult Add([FromForm(Name = ("Image"))] IFormFile formFile, [FromForm] CarImage carImage)
+        {
+            var result = _carImageService.Add(carImage, formFile);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpDelete("delete/{id}")]
@@ -56,15 +72,23 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
-            return NotFound();
+            return NotFound(result);
         }
 
 
-        [HttpPut]
-        public IActionResult Update()
+        [HttpPut("UpdateCarImage")]
+        public IActionResult Update([FromForm(Name = ("Image"))] IFormFile formFile, [FromForm] CarImage carImage)
         {
-            return Ok();
+            var result = _carImageService.Update(carImage, formFile);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
+
+
+
 
 
     }

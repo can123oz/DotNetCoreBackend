@@ -14,5 +14,9 @@ namespace Business.Constants
         public static string DataErrorMessage = "Data Error Returned.";
         public static string NameTakenError = "Name is Taken pick another name.";
         public static string GeneralErrorMessage = "An Error Occured in Business Rules";
+        public static string ImageAdded = "Image Added.";
+        public static string ImageNotFound = "Image Not Found.";
+        public static string ImageError = "Image Error.";
+        public static string ImageUpdated = "Image Updated.";
     }
 }

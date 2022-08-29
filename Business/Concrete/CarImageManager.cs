@@ -1,8 +1,11 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Utilities.Business;
+using Core.Utilities.Helpers;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +23,29 @@ namespace Business.Concrete
             _carImageDal = carImageDal;
         }
 
-        public IResult Add(CarImage carImage)
+        public IResult Add(CarImage carImage, IFormFile formFile)
         {
-            throw new NotImplementedException();
+            var result = BusinessRules.Run(CheckCarImageCount(carImage.CarId));
+            var imageResult = FileHelper.Add(formFile);
+            if (!imageResult.Success)
+            {
+                return new ErrorResult(Message.ErrorMessage);
+            }
+            carImage.Date = DateTime.Now;
+            carImage.ImagePath = imageResult.Message;
+            _carImageDal.Add(carImage);
+
+            return new SuccessResult(Message.ImageAdded);
         }
 
         public IResult Delete(int Id)
         {
+            var delete = _carImageDal.Get(c => c.CarId == Id);
+            if (delete == null)
+            {
+                return new ErrorResult();
+            }
+            FileHelper.Delete(delete.ImagePath);
             _carImageDal.Delete(p => p.Id == Id);
             return new Result(true);
         }
@@ -37,14 +56,16 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(result,Message.SuccessMessage);
         }
 
-        public IResult GetByCarId(int Id)
+        public IDataResult<List<CarImage>> GetByCarId(int Id)
         {
-            var result = _carImageDal.Get(p => p.CarId == Id);
-            if (result != null)
+            var result = _carImageDal.GetAll(p => p.CarId == Id);
+            if (result.Count > 0)
             {
-                return new SuccessDataResult<CarImage>(result);
+                return new SuccessDataResult<List<CarImage>>(result,Message.DataSuccessMessage);
             }
-            return new ErrorDataResult<CarImage>();
+            List<CarImage> images = new List<CarImage>();
+            images.Add(new CarImage() { CarId = Id, ImagePath = "/Uploads/Images/default.jpg"});
+            return new SuccessDataResult<List<CarImage>>(images);
         }
 
         public IResult GetById(int Id)
@@ -57,9 +78,33 @@ namespace Business.Concrete
             return new ErrorDataResult<CarImage>();
         }
 
-        public IResult Update(CarImage carImage)
+        public IResult Update(CarImage carImage, IFormFile formFile)
         {
-            throw new NotImplementedException();
+            var isImage = _carImageDal.Get(c => c.CarId == carImage.Id);
+            if (isImage == null)
+            {
+                return new ErrorResult(Message.ImageNotFound);
+            }
+
+            var updated = FileHelper.Update(isImage.ImagePath, formFile);
+            if (!updated.Success)
+            {
+                return new ErrorResult(Message.ImageError);
+            }
+            carImage.ImagePath = (updated.Message);
+            _carImageDal.Update(carImage);
+            return new SuccessResult(Message.ImageUpdated);
         }
+
+        private IResult CheckCarImageCount(int carId)
+        {
+            var result = _carImageDal.GetAll(p => p.CarId == carId);
+            if (result.Count > 6)
+            {
+                return new ErrorResult("Max Car Image Reached.");
+            }
+            return new SuccessResult();
+        }
+
     }
 }
