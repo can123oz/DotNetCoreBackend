@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
             _rentalsService = rentalsService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
             var result = _rentalsService.GetAll();

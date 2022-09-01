@@ -12,7 +12,7 @@ namespace Core.Utilities.Helpers
     public class FileHelper
     {
         private static string _currentFileDirectory = Environment.CurrentDirectory + "\\wwwroot";
-        private static string _folderName = "\\uploads\\Images";
+        private static string _folderName = "\\uploads\\";
 
 
         public static IResult Add(IFormFile file)
@@ -57,7 +57,7 @@ namespace Core.Utilities.Helpers
             CheckFileDirectoryExist(_currentFileDirectory + _folderName);
             CreateImageFile((_currentFileDirectory + _folderName + randomName + type), file);
 
-            return new SuccessResult();
+            return new SuccessResult((_folderName + randomName + type).Replace("\\", "/"));
         }
 
         public static IResult Delete(string path)
