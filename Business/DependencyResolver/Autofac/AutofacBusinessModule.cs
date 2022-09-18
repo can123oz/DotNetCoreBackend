@@ -39,6 +39,9 @@ namespace Business.DependencyResolver
             builder.RegisterType<CarImageManager>().As<ICarImageService>().SingleInstance();
             builder.RegisterType<EfCarImageDal>().As<ICarImageDal>().SingleInstance();
 
+            builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();
+            builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
+
             //for intercepting when a class is genereted. after these lines our attribute validations works.
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -20,48 +21,26 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
-        public IResult AddUser(User user)
+        public IResult Add(User user)
         {
-            if (user.FirstName != null)
-            {
-                _userDal.Add(user);
-                return new SuccessResult(Message.SuccessMessage);
-            }
-            return new ErrorResult(Message.ErrorMessage);
-        }
-
-        public IResult DeleteUser(int id)
-        {
-            _userDal.Delete(p => p.Id == id);
+            _userDal.Add(user);
             return new SuccessResult(Message.SuccessMessage);
         }
 
-        public IDataResult<List<User>> GetAll()
+        public IDataResult<User> GetByEmail(string email)
         {
-            var result = _userDal.GetAll();
-            if (result.Count > 0)
+            var result = _userDal.Get(p => p.Email == email);
+            if (result != null)
             {
-                return new DataResult<List<User>>(result, true);
+                return new SuccessDataResult<User>(result);
             }
-            return new ErrorDataResult<List<User>>(result);
+            return new ErrorDataResult<User>(Message.UserNotFound);
         }
 
-        public IDataResult<User> GetById(int id)
+        public List<OperationClaim> GetClaims(User user)
         {
-            var result = _userDal.Get(p => p.Id == id);
-            return new SuccessDataResult<User>(result, Message.DataSuccessMessage);
+            var result = _userDal.GetClaims(user);
+            return result;
         }
-
-        public IResult UpdateUser(User user)
-        {
-            var updatedUser = _userDal.Get(p => p.Id == user.Id);
-            if (updatedUser.FirstName != null)
-            {
-                _userDal.Update(updatedUser);
-                return new SuccessResult(Message.SuccessMessage);
-            }
-            return new ErrorResult(Message.ErrorMessage);
-        }
-
     }
 }
