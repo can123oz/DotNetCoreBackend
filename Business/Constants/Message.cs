@@ -20,5 +20,7 @@ namespace Business.Constants
         public static string ImageError = "Image Error";
         public static string ImageUpdated = "Image Updated";
         public static string UserNotFound = "User Not Found";
+        public static string UserExist = "User Exist";
+        public static string WrongPassword = "Wrong Password";
     }
 }
