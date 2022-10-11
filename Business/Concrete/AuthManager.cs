@@ -18,16 +18,14 @@ namespace Business.Concrete
     {
         private IUserService _userService;
         private ITokenHelper _tokenHelper;
-        IConfiguration _configuration;
 
         public AuthManager(IUserService userService, IConfiguration configuration, ITokenHelper tokenHelper)
         {
-            _configuration = configuration;
             _tokenHelper = tokenHelper;
             _userService = userService;
         }
 
-        public IDataResult<User> Login(UserForLoginDto userForLogin, string password)
+        public IDataResult<User> Login(UserForLoginDto userForLogin)
         {
             var userToCheck = _userService.GetByEmail(userForLogin.Email);
 
@@ -40,13 +38,24 @@ namespace Business.Concrete
                 return new ErrorDataResult<User>(Message.WrongPassword);
             }
 
-
-
+            return new SuccessDataResult<User>(userToCheck.Data ,Message.SuccessLogin);
         }
 
-        public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
+        public IDataResult<User> Register(UserForRegisterDto userForRegisterDto)
         {
-            throw new NotImplementedException();
+            byte[] passwordHash, passwordSalt;
+            HashingHelper.CreatePasswordHash(userForRegisterDto.Password, out passwordHash, out passwordSalt);
+            var user = new User()
+            {
+                FirstName=userForRegisterDto.FirstName,
+                LastName=userForRegisterDto.LastName,
+                Email=userForRegisterDto.Email,
+                PasswordHash=passwordHash,
+                PasswordSalt=passwordSalt,
+                Status=true,
+            };
+            _userService.Add(user);
+            return new SuccessDataResult<User>(user,"Successfuly Registered");
         }
 
         public IResult UserExist(string email)
@@ -56,16 +65,14 @@ namespace Business.Concrete
             {
                 return new SuccessResult(Message.UserExist);
             }
-            else
-            {
-                return new ErrorResult(Message.UserNotFound);
-            }
+            return new ErrorResult(Message.UserNotFound);
         }
+
         public IDataResult<AccessToken> CreateAcccessToken(User user)
         {
             var claims = _userService.GetClaims(user);
             var accessToken = _tokenHelper.CreateToken(user, claims);
-            return new SuccessDataResult<AccessToken>(accessToken);
+            return new SuccessDataResult<AccessToken>(accessToken, "Access Token Created");
         }
     }
 }

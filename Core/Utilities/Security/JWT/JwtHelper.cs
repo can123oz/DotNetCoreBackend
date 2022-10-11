@@ -25,6 +25,7 @@ namespace Core.Utilities.Security.JWT
             _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
         }
+
         public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
         {
             var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
@@ -66,7 +67,5 @@ namespace Core.Utilities.Security.JWT
 
             return claims;
         }
-
-
     }
 }

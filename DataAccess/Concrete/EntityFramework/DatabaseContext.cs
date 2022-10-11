@@ -15,14 +15,14 @@ namespace DataAccess.Concrete.EntityFramework
         {
             optionsBuilder.UseSqlServer("server=DESKTOP-07T1LR2;Database=EnginOdev;Trusted_Connection=true");
         }
-        public DbSet<Color> Color  { get; set; }
+        public DbSet<Color> Color { get; set; }
         public DbSet<Car> Car { get; set; }
-        public DbSet<Brand> Brand  { get; set; }
+        public DbSet<Brand> Brand { get; set; }
         public DbSet<Customers> Customers { get; set; }
-        public DbSet<Rentals> Rentals   { get; set; }
-        public DbSet<User> User    { get; set; }
-        public DbSet<CarImage> CarImage  { get; set; }
-        public DbSet<OperationClaim> OperationClaim { get; set; }
-        public DbSet<UserOperationClaim> userOperationClaim { get; set; }
+        public DbSet<Rentals> Rentals { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<CarImage> CarImage { get; set; }
+        public DbSet<OperationClaim> OperationsClaims { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
     }
 }
