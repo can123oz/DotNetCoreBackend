@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entity.Concrete;
+using Entity.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -54,9 +55,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("Add")]
-        public IActionResult Add(Rentals rentals)
+        public IActionResult Add(RentalDto rentalDto)
         {
-            var result = _rentalsService.AddRental(rentals);
+            var result = _rentalsService.AddRental(rentalDto);
             if (result.Success)
             {
                 return Ok(result);
@@ -74,5 +75,13 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+
+        [HttpPost("ReturnCar")]
+        public IActionResult ReturnCar(RentalDto rentalDto)
+        {
+            var returedCar = _rentalsService.ReturnCar(rentalDto.carId);
+            return Ok(returedCar);
+        }
+
     }
 }

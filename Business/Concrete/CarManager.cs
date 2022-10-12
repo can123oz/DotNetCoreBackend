@@ -30,7 +30,7 @@ namespace Business.Concrete
         public IResult AddCar(Car car)
         {
             //ValidationTool.Validate(new CarValidator(), car); //no need to validate like this.
-            var result = BusinessRules.Run(CheckIfNameTaken(car.Name), CheckIfCarCountOfBrandCorrect(car.BrandId,10));
+            var result = BusinessRules.Run(CheckIfNameTaken(car.Name), CheckIfCarCountOfBrandCorrect(car.BrandId,100));
             if (result.Success)
             {
                 _carDal.Add(car);
@@ -103,8 +103,8 @@ namespace Business.Concrete
 
         private IResult CheckIfCarCountOfBrandCorrect(int brandId, int maxNumber)
         {
-            var result = _carDal.GetAll(p => p.BrandId == brandId).Any();
-            if (result)
+            var result = _carDal.GetAll(p => p.BrandId == brandId);
+            if (result.Count > maxNumber)
             {
                 return new ErrorResult(Message.GeneralErrorMessage);
             }
@@ -128,5 +128,18 @@ namespace Business.Concrete
             }
             return new ErrorResult(Message.GeneralErrorMessage);
         }
+
+        public IDataResult<List<CarDetailDto>> GetCarsByBrandName(string brand)
+        {
+            var cars = _carDal.GetCarDetails().Where(p => p.BrandName == brand).ToList();
+            return new SuccessDataResult<List<CarDetailDto>>(cars);
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarsByColor(string color)
+        {
+            var cars = _carDal.GetCarDetails().Where(p => p.ColorName == color).ToList();
+            return new SuccessDataResult<List<CarDetailDto>>(cars);
+        }
+
     }
 }

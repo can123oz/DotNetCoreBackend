@@ -23,5 +23,9 @@ namespace Business.Constants
         public static string UserExist = "User Exist";
         public static string WrongPassword = "Wrong Password";
         public static string SuccessLogin = "Successfuly logged in";
+        public static string RentNotFound = "Car not found";
+        public static string CarIsReadyToRent = "Car is ready to rent.";
+        public static string CarNotReturnYet = "Car is still with a customer.";
+        public static string RentCreated = "Rent is Created Please return the car clean and full.";
     }
 }
