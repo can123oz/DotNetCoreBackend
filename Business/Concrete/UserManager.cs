@@ -4,6 +4,7 @@ using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
+using Entity.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,19 @@ namespace Business.Concrete
             return new SuccessResult(Message.SuccessMessage);
         }
 
+        public IDataResult<List<User>> GetAll()
+        {
+            var result = _userDal.GetAll();
+            return new SuccessDataResult<List<User>>(result,Message.SuccessMessage);
+        }
+
+
+        public IDataResult<List<UserDto>> GetAllUsers()
+        {
+            var result = _userDal.GetAllUserDtos();
+            return new SuccessDataResult<List<UserDto>>(result, Message.SuccessMessage);
+        }
+
         public IDataResult<User> GetByEmail(string email)
         {
             var result = _userDal.Get(p => p.Email == email);
@@ -35,6 +49,16 @@ namespace Business.Concrete
                 return new SuccessDataResult<User>(result);
             }
             return new ErrorDataResult<User>(Message.UserNotFound);
+        }
+
+        public IDataResult<User> GetById(int id)
+        {
+            var result = _userDal.Get(p => p.Id == id);
+            if (result != null)
+            {
+                return new SuccessDataResult<User>(result);
+            }
+            return new ErrorDataResult<User>("User not found");
         }
 
         public List<OperationClaim> GetClaims(User user)
