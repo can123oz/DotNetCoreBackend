@@ -16,12 +16,10 @@ namespace Business.Concrete
     public class RentalsManager : IRentalsService
     {
         IRentalsDal _rentalDal;
-        ICarService _carService;
 
-        public RentalsManager(IRentalsDal rentalsDal, ICarService carService)
+        public RentalsManager(IRentalsDal rentalsDal)
         {
             _rentalDal = rentalsDal;
-            _carService = carService;
         }
 
         public IResult AddRental(RentalDto rentalDto)
@@ -74,9 +72,9 @@ namespace Business.Concrete
             return new Result(Message.SuccessMessage, true);
         }
 
-        public IResult ReturnCar(int rentalId)
+        public IResult ReturnCar(int carId)
         {
-            var rental = _rentalDal.Get(p => p.CarId == rentalId);   
+            var rental = _rentalDal.GetAll(p => p.CarId == carId).LastOrDefault();   
             if (rental != null)
             {
                 if (rental.ReturnDate < DateTime.Now)
@@ -99,7 +97,7 @@ namespace Business.Concrete
 
         private IResult CarStatus(int carId)
         {
-            var rental = _rentalDal.Get(p => p.CarId == carId);
+            var rental = _rentalDal.GetAll(p => p.CarId == carId).LastOrDefault();
            
             if (rental != null)
             {
@@ -118,6 +116,16 @@ namespace Business.Concrete
                 }
             }
             return new SuccessResult(Message.CarIsReadyToRent);
+        }
+
+        public IDataResult<List<RentalDetailDto>> GetRentalDetails()
+        {
+            var result = _rentalDal.GetRentalDetail();
+            if (result.Count > 0)
+            {
+                return new SuccessDataResult<List<RentalDetailDto>>(result, Message.DataSuccessMessage);
+            }
+            return new ErrorDataResult<List<RentalDetailDto>>(result, Message.DataSuccessMessage);
         }
     }
 }

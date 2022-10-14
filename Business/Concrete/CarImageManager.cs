@@ -23,9 +23,10 @@ namespace Business.Concrete
             _carImageDal = carImageDal;
         }
 
-        public IResult Add(CarImage carImage, IFormFile formFile)
+        public IResult Add(IFormFile formFile, int carId)
         {
-            var result = BusinessRules.Run(CheckCarImageCount(carImage.CarId));
+            CarImage carImage = new();
+            var result = BusinessRules.Run(CheckCarImageCount(carId));
             if (result != null)
             {
                 return result;
@@ -112,6 +113,9 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
+
+
+
 
     }
 }
