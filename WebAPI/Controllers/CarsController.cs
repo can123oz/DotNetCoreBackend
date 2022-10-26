@@ -22,7 +22,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetAll")]
-        [Authorize(Roles = "Product.List")]
         public IActionResult GetAll()
         {
             var result = _carService.GetAll();
