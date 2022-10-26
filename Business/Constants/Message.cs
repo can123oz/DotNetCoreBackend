@@ -27,5 +27,6 @@ namespace Business.Constants
         public static string CarIsReadyToRent = "Car is ready to rent.";
         public static string CarNotReturnYet = "Car is still with a customer.";
         public static string RentCreated = "Rent is Created Please return the car clean and full.";
+        public static string AuthorizationDenied = "Not Authorized For this action";
     }
 }

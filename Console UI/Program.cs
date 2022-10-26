@@ -49,17 +49,6 @@ namespace Console_UI
             //}
             //Console.WriteLine("-----------------------------------");,
 
-            CarManager carManager = new CarManager(new EfCarDal());
-
-            Car car = new Car()
-            {
-                Name = "Son agustos",
-                BrandId = 1,
-                ModelYear = 1992,
-                DailyPrice = 120000,
-                Description = "son denemedim",
-            };
-
 
 
 

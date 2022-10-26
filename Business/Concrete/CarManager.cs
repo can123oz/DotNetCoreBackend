@@ -2,7 +2,9 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Caching;
 using Core.Aspects.Validation;
+using Core.CrossCuttingConcerns.Caching;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -25,12 +27,13 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        [SecuredOperation]
         [ValidationAspect(typeof(CarValidator))]
+        [SecuredOperation("admin,moderator")]
+        [CacheRemoveAspect("ICarService.GetAll")]
         public IResult AddCar(Car car)
         {
             //ValidationTool.Validate(new CarValidator(), car); //no need to validate like this.
-            var result = BusinessRules.Run(CheckIfNameTaken(car.Name), CheckIfCarCountOfBrandCorrect(car.BrandId,100));
+            var result = BusinessRules.Run(CheckIfNameTaken(car.Name), CheckIfCarCountOfBrandCorrect(car.BrandId, 100));
             if (result.Success)
             {
                 _carDal.Add(car);
@@ -39,18 +42,40 @@ namespace Business.Concrete
             return new ErrorResult();
         }
 
+        [CacheRemoveAspect("ICarService.GetAll")]
         public IResult DeleteCar(int id)
         {
             _carDal.Delete(p => p.Id == id);
             return new Result(true);
         }
 
+
+        [SecuredOperation("admin,moderator")]
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
+            //this is the badway.....
+            //if (_cacheManager.IsAdd("GetAll()"))
+            //{
+            //    var result1 = _cacheManager.Get<List<Car>>("GetAll()");
+            //    return new SuccessDataResult<List<Car>>(result1, Message.DataSuccessMessage);
+            //}
+            //else
+            //{
+            //    var result2 = _carDal.GetAll();
+            //    _cacheManager.Add("GetAll()", result2, 5);
+            //    return new SuccessDataResult<List<Car>>(result2, Message.DataSuccessMessage);
+            //}
+            
             var result = _carDal.GetAll();
-            return new SuccessDataResult<List<Car>>(result, Message.DataSuccessMessage);
+            if (result != null)
+            {
+                return new SuccessDataResult<List<Car>>(result, Message.DataSuccessMessage);
+            }
+            return new ErrorDataResult<List<Car>>(Message.DataErrorMessage);
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetByBrandId(int id)
         {
             var result = _carDal.GetAll(p => p.BrandId == id);
@@ -61,6 +86,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Car>>(Message.DataErrorMessage);
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetByColorId(int id)
         {
             var result = _carDal.GetAll(p => p.ColorId == id);
@@ -71,6 +97,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Car>>(Message.DataErrorMessage);
         }
 
+        [CacheAspect]
         public IDataResult<Car> GetById(int id)
         {
             var result = _carDal.Get(p => p.Id == id);
@@ -81,6 +108,7 @@ namespace Business.Concrete
             return new ErrorDataResult<Car>(result, Message.DataErrorMessage);
         }
 
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             var result = _carDal.GetCarDetails();
@@ -101,6 +129,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+
         private IResult CheckIfCarCountOfBrandCorrect(int brandId, int maxNumber)
         {
             var result = _carDal.GetAll(p => p.BrandId == brandId);
@@ -112,6 +141,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.GetAll")]
         public IResult UpdateCar(Car car)
         {
             var updatedCar = _carDal.Get(p => p.Id == car.Id);
@@ -129,12 +159,14 @@ namespace Business.Concrete
             return new ErrorResult(Message.GeneralErrorMessage);
         }
 
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarsByBrandName(string brand)
         {
             var cars = _carDal.GetCarDetails().Where(p => p.BrandName == brand).ToList();
             return new SuccessDataResult<List<CarDetailDto>>(cars);
         }
 
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarsByColor(string color)
         {
             var cars = _carDal.GetCarDetails().Where(p => p.ColorName == color).ToList();
