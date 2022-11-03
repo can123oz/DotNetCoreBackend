@@ -22,8 +22,13 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
-        public CarManager(ICarDal carDal)
+        IColorService _colorService;
+        IBrandService _brandService;
+
+        public CarManager(ICarDal carDal, IColorService colorService, IBrandService brandService)
         {
+            _brandService = brandService;
+            _colorService = colorService;
             _carDal = carDal;
         }
 
@@ -66,7 +71,7 @@ namespace Business.Concrete
             //    _cacheManager.Add("GetAll()", result2, 5);
             //    return new SuccessDataResult<List<Car>>(result2, Message.DataSuccessMessage);
             //}
-            
+
             var result = _carDal.GetAll();
             if (result != null)
             {
@@ -76,25 +81,25 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetByBrandId(int id)
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByBrandId(int id)
         {
-            var result = _carDal.GetAll(p => p.BrandId == id);
+            var result = _carDal.GetCarDetails().Where(p => p.BrandId == id).ToList();
             if (result.Count > 0)
             {
-                return new SuccessDataResult<List<Car>>(result, Message.DataSuccessMessage);
+                return new SuccessDataResult<List<CarDetailDto>>(result, Message.DataSuccessMessage);
             }
-            return new ErrorDataResult<List<Car>>(Message.DataErrorMessage);
+            return new ErrorDataResult<List<CarDetailDto>>(Message.DataErrorMessage);
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetByColorId(int id)
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByColorId(int id)
         {
-            var result = _carDal.GetAll(p => p.ColorId == id);
+            var result = _carDal.GetCarDetails().Where(p => p.ColorId == id).ToList();
             if (result.Count > 0)
             {
-                return new SuccessDataResult<List<Car>>(result, Message.DataSuccessMessage);
+                return new SuccessDataResult<List<CarDetailDto>>(result, Message.DataSuccessMessage);
             }
-            return new ErrorDataResult<List<Car>>(Message.DataErrorMessage);
+            return new ErrorDataResult<List<CarDetailDto>>(Message.DataErrorMessage);
         }
 
         [CacheAspect]
