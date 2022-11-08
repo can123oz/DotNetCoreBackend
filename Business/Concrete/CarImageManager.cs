@@ -25,20 +25,20 @@ namespace Business.Concrete
 
         public IResult Add(IFormFile formFile, int carId)
         {
-            CarImage carImage = new();
             var result = BusinessRules.Run(CheckCarImageCount(carId));
             if (result != null)
             {
                 return result;
             }
-
+            CarImage carImage = new();
             var imageResult = FileHelper.Add(formFile);
             if (!imageResult.Success)
             {
-                return new ErrorResult(Message.ErrorMessage);
+                return new ErrorResult(imageResult.Message);
             }
             carImage.Name = imageResult.Message;
             carImage.Date = DateTime.Now;
+            carImage.CarId = carId;
             carImage.ImagePath = imageResult.Message;
             _carImageDal.Add(carImage);
 
@@ -113,9 +113,5 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-
-
-
-
     }
 }

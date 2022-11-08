@@ -70,6 +70,7 @@ namespace Core.Utilities.Helpers
 
         private static IResult CheckFileTypeValid(string type)
         {
+            type = type.ToLower();
             if (type != ".jpg" && type != ".png" && type != ".jpeg")
             {
                 return new ErrorResult("Wront File Type");
