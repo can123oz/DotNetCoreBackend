@@ -11,6 +11,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
 using Entity.DTO;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +33,14 @@ namespace Business.Concrete
 
         [ValidationAspect(typeof(CarValidator))]
         [SecuredOperation("admin,moderator")]
-        [CacheRemoveAspect("ICarService.GetAll")]
+        [CacheRemoveAspect("ICarService.Get")] //deletes all cache which includes get keyword
         public IResult AddCar(Car car)
         {
             //ValidationTool.Validate(new CarValidator(), car); //no need to validate like this.
+            
+            //CarValidator validator = new(); //the way in the documents
+            //ValidationResult resultFluent = validator.Validate(car);
+
             var result = BusinessRules.Run(CheckIfNameTaken(car.Name), CheckIfCarCountOfBrandCorrect(car.BrandId, 100));
             if (result.Success)
             {
@@ -144,19 +149,24 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarValidator))]
-        [CacheRemoveAspect("ICarService.GetAll")]
+        [CacheRemoveAspect("ICarService.Get")] //deletes all cache which includes get keyword
+        //[CacheRemoveAspect("ICarService.GetById")]
         public IResult UpdateCar(Car car)
         {
             var updatedCar = _carDal.Get(p => p.Id == car.Id);
             if (updatedCar != null)
             {
-                updatedCar.BrandId = car.BrandId;
-                updatedCar.ColorId = car.ColorId;
-                updatedCar.ColorId = car.ColorId;
-                updatedCar.DailyPrice = car.DailyPrice;
-                updatedCar.Description = car.Description;
-                updatedCar.ModelYear = car.ModelYear;
-                updatedCar.Name = car.Name;
+                #region
+                //updatedCar.BrandId = car.BrandId;
+                //updatedCar.ColorId = car.ColorId;
+                //updatedCar.ColorId = car.ColorId;
+                //updatedCar.DailyPrice = car.DailyPrice;
+                //updatedCar.Description = car.Description;
+                //updatedCar.ModelYear = car.ModelYear;
+                //updatedCar.Name = car.Name;
+                #endregion 
+
+                _carDal.Update(car);
                 return new SuccessResult(Message.SuccessMessage);
             }
             return new ErrorResult(Message.GeneralErrorMessage);
@@ -194,6 +204,16 @@ namespace Business.Concrete
                 return new SuccessDataResult<List<CarImage>>(result, Message.DataSuccessMessage);
             }
             return new ErrorDataResult<List<CarImage>>(result, Message.DataErrorMessage);
+        }
+
+        public IDataResult<List<CarDetailDto>> GetFilteredCars(int colorId, int brandId)
+        {
+            var result = _carDal.GetCarDetails().Where(p => p.ColorId == colorId && p.BrandId == brandId).ToList();
+            if (result != null)
+            {
+                return new SuccessDataResult<List<CarDetailDto>>(result, Message.DataSuccessMessage);
+            }
+            return new ErrorDataResult<List<CarDetailDto>>(result, Message.GeneralErrorMessage);
         }
     }
 }

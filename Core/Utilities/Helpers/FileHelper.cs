@@ -67,7 +67,6 @@ namespace Core.Utilities.Helpers
         }
 
         //Verification Methods
-
         private static IResult CheckFileTypeValid(string type)
         {
             type = type.ToLower();

@@ -93,8 +93,6 @@ namespace Business.Concrete
         }
 
 
-
-
         private IResult CarStatus(int carId)
         {
             var rental = _rentalDal.GetAll(p => p.CarId == carId).LastOrDefault();
@@ -105,7 +103,7 @@ namespace Business.Concrete
                 {
                     return new ErrorResult(Message.CarNotReturnYet);
                 }
-                int result = DateTime.Compare(rental.RentDate, Convert.ToDateTime(rental.ReturnDate));
+                int result = DateTime.Compare(DateTime.Now, Convert.ToDateTime(rental.ReturnDate));
                 if (result >= 0)
                 {
                     return new SuccessResult(Message.CarIsReadyToRent);
@@ -126,6 +124,12 @@ namespace Business.Concrete
                 return new SuccessDataResult<List<RentalDetailDto>>(result, Message.DataSuccessMessage);
             }
             return new ErrorDataResult<List<RentalDetailDto>>(result, Message.DataSuccessMessage);
+        }
+
+        public bool GetCarStatus(int id)
+        {
+            var result = CarStatus(id).Success;
+            return result;            
         }
     }
 }

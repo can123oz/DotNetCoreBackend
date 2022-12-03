@@ -84,5 +84,13 @@ namespace WebAPI.Controllers
             var result = _rentalsService.GetRentalDetails();
             return Ok(result);
         }
+
+
+        [HttpGet("CarStatus")]
+        public IActionResult GetCarStatus(int carId)
+        {
+            var result = _rentalsService.GetCarStatus(carId);
+            return Ok(result);
+        }
     }
 }

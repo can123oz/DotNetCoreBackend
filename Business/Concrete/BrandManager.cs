@@ -60,5 +60,16 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<Brand>(Message.DataErrorMessage);
         }
+
+        public IDataResult<Brand> Update(Brand brand)
+        {
+            var oldBrand = _context.Get(p => p.Id == brand.Id);
+            if (oldBrand != null)
+            {
+                //_context.Update()
+                return new SuccessDataResult<Brand>(brand, Message.SuccessUpdate);
+            }
+            return new ErrorDataResult<Brand>("Brand Cant Find");
+        }
     }
 }
