@@ -14,12 +14,12 @@ namespace Business.ValidationRules.FluentValidation
         {
             RuleFor(p => p.Name).NotEmpty().WithMessage("Brand Name Cant be Empty...");
             RuleFor(p => p.Name).MinimumLength(2).WithMessage("Brand Name Has to be Longer");
-            RuleFor(p => p.Name).Must(CantStartWith).WithMessage("Brand Name cant start with X");
+            //RuleFor(p => p.Name).Must(CantStartWith).WithMessage("Brand Name cant start with X");
         }
 
-        public bool CantStartWith(string arg)
-        {
-            return arg.StartsWith("X");
-        }
+        //public bool CantStartWith(string arg)
+        //{
+        //    return arg.StartsWith("X");
+        //}
     }
 }

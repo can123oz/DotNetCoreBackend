@@ -98,7 +98,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPut("update")]
+        [HttpPut("Update")]
         public IActionResult UpdateCar([FromBody] Car car)
         {
             var result = _carService.UpdateCar(car);

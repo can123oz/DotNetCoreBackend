@@ -26,12 +26,10 @@ namespace Business.Concrete
         [ValidationAspect(typeof(ColorValidator))]
         public IResult AddColor(Color color)
         {
-            ValidationTool.Validate(new ColorValidator(), color);
+            //ValidationTool.Validate(new ColorValidator(), color);
 
             _colorDal.Add(color);
             return new SuccessResult(Message.SuccessMessage);
-
-            //return new ErrorResult(Message.ErrorMessage);
         }
 
         public IResult DeleteColor(int id)
@@ -58,6 +56,18 @@ namespace Business.Concrete
                 return new DataResult<Color>(result, true);
             }
             return new ErrorDataResult<Color>(Message.DataErrorMessage);
+        }
+
+        [ValidationAspect(typeof(ColorValidator))]
+        public IResult UpdateColor(Color color)
+        {
+            var oldColor = _colorDal.Get(p => p.Id == color.Id);
+            if (oldColor != null)
+            {
+                _colorDal.Update(color);
+                return new SuccessDataResult<Color>(color, Message.SuccessUpdate);
+            }
+            return new ErrorDataResult<Color>("Brand Cant Find");
         }
     }
 }
