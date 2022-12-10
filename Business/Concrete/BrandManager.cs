@@ -25,7 +25,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(BrandValidator))]
         public IResult AddBrand(Brand brand)
         {
-            ValidationTool.Validate(new BrandValidator(), brand);
+            //ValidationTool.Validate(new BrandValidator(), brand); //old way..
             _context.Add(brand);
             return new SuccessResult(Message.SuccessMessage);
             //return new ErrorResult(Message.ErrorMessage);
@@ -62,15 +62,15 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(BrandValidator))]
-        public IDataResult<Brand> Update(Brand brand)
+        public IResult Update(Brand brand)
         {
             var oldBrand = _context.Get(p => p.Id == brand.Id);
             if (oldBrand != null)
             {
                 _context.Update(brand);
-                return new SuccessDataResult<Brand>(brand, Message.SuccessUpdate);
+                return new SuccessResult(Message.SuccessUpdate);
             }
-            return new ErrorDataResult<Brand>("Brand Cant Find");
+            return new ErrorResult("Brand Cant Find");
         }
     }
 }

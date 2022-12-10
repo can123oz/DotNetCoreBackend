@@ -27,7 +27,6 @@ namespace Business.Concrete
         public IResult AddColor(Color color)
         {
             //ValidationTool.Validate(new ColorValidator(), color);
-
             _colorDal.Add(color);
             return new SuccessResult(Message.SuccessMessage);
         }

@@ -32,7 +32,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarValidator))]
-        [SecuredOperation("admin,moderator")]
+        //[SecuredOperation("admin,moderator")]
         [CacheRemoveAspect("ICarService.Get")] //deletes all cache which includes get keyword
         public IResult AddCar(Car car)
         {
@@ -42,7 +42,7 @@ namespace Business.Concrete
             //ValidationResult resultFluent = validator.Validate(car);
 
             var result = BusinessRules.Run(CheckIfNameTaken(car.Name), CheckIfCarCountOfBrandCorrect(car.BrandId, 100));
-            if (result.Success)
+            if (result == null)
             {
                 _carDal.Add(car);
                 return new SuccessResult(Message.SuccessMessage);
